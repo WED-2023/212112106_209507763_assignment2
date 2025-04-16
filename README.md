@@ -6,7 +6,7 @@
   
 This Repository contains the Project for Assignment 2 In the course "Internet Development 2025" <br>
 
-- [Link to Github.IO Website]()
+- Link to Github.IO Website: https://wed-2023.github.io/212112106_209507763_assignment2/
 
 ### About the Project 
  This project is a Video Game developed with HTML5, JavaScript and CSS. 
