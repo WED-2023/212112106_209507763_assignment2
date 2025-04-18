@@ -43,6 +43,13 @@ function userExists(username) {
       return;
     }
 
+      //Check for both letters and numbers in password
+  const passwordComplexityRegex = /^(?=.*[A-Za-z])(?=.*\d).+$/;
+  if (!passwordComplexityRegex.test(password)) {
+    alert("Password must contain both letters and numbers.");
+    return;
+  }
+
     //Check if User already Exists
     if (userExists(username)) {
       alert("Username already exists.");
@@ -69,7 +76,6 @@ function userExists(username) {
     saveUser(newUser);
     alert("Registration successful!");
     showPage('login');
-  
 
     alert("Registration successful!");
     showPage('login');
@@ -117,7 +123,7 @@ function login() {
   // Close dialog on clicking outside OR Escape key
  const aboutModal = document.getElementById('aboutModal');
 
- aboutModal.addEventListener('click', (e) => {
+aboutModal.addEventListener('click', (e) => {
 const rect = aboutModal.getBoundingClientRect();
 const clickedOutside =
   e.clientX < rect.left || e.clientX > rect.right ||
@@ -134,10 +140,7 @@ if (e.key === "Escape" && aboutModal.open) {
  }
  });
 
-   //auto-load the Welcome page on site launch
-window.onload = () => {
-  showPage('welcome');
-};
+
 
 
 
@@ -153,29 +156,29 @@ const handler = (e) => {
 document.addEventListener('keydown', handler);
 }
 
-function startGame() {
-const fireKey = document.getElementById('fireKey').value;
-const duration = parseInt(document.getElementById('gameDuration').value);
-const goodColor = document.getElementById('goodColor').value;
-const badColor = document.getElementById('badColor').value;
+// function startGame() {
+// const fireKey = document.getElementById('fireKey').value;
+// const duration = parseInt(document.getElementById('gameDuration').value);
+// const goodColor = document.getElementById('goodColor').value;
+// const badColor = document.getElementById('badColor').value;
 
-if (!fireKey) {
-  alert("Please set a fire button.");
-  return;
-}
+// if (!fireKey) {
+//   alert("Please set a fire button.");
+//   return;
+// }
 
-if (duration < 2) {
-  alert("Game duration must be at least 2 minutes.");
-  return;
-}
+// if (duration < 2) {
+//   alert("Game duration must be at least 2 minutes.");
+//   return;
+// }
 
-// You can store these settings in global variables or localStorage
-localStorage.setItem("fireKey", fireKey);
-localStorage.setItem("gameDuration", duration);
-localStorage.setItem("goodColor", goodColor);
-localStorage.setItem("badColor", badColor);
+// // You can store these settings in global variables or localStorage
+// localStorage.setItem("fireKey", fireKey);
+// localStorage.setItem("gameDuration", duration);
+// localStorage.setItem("goodColor", goodColor);
+// localStorage.setItem("badColor", badColor);
 
-// Proceed to Game
-showPage('game');
-}
+// // Proceed to Game
+// showPage('game');
+// }
 // Start Game Play

@@ -10,10 +10,31 @@
               "menu content"
               "footer footer";
             height: 100vh;
-            background-color: #f4f7f8;
+            /* background-color: #f4f7f8; */
+            background-color: #99c6d4;
+            background-image: url("https://www.transparenttextures.com/patterns/cream-dust.png");
+            /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
             color: #333;
           }
-          
+
+          p {
+            font-family: Garamond, serif;
+            font-size: 24px;
+            font-weight: bold;
+          }
+
+          h1 {
+            font-family: Garamond, serif;
+            font-size: 48px;
+            font-weight: bold;
+          }
+
+          h2 {
+            font-family: Garamond, serif;
+            font-size: 36px;
+            font-weight: bold;
+          }
             /* Header */
             header {
               grid-area: header;
@@ -22,7 +43,7 @@
             display: flex;
             align-items: center;
             padding: 0 30px;
-            font-size: 22px;
+            font-size: 28px;
             font-weight: bold;
             gap: 15px; /* spacing between logo and title */
             }
@@ -38,20 +59,27 @@
           }
           
             /* Footer */
+         
+        
             footer {
-              grid-area: footer;
-              background-color: #2e3a59;
-              color: #eee;
-              text-align: center;
-              padding: 10px;
-              font-size: 14px;
-            }
+                grid-area: footer;
+                background-color: #222;
+                color: #eee;
+                text-align: center;
+                padding: 12px;
+                margin-top: auto;
+                margin-bottom: auto;
+                font-size: 16px;
+              }
             /* Footer */
           
               nav {
               grid-area: menu;
-              background-color: #e0e7ef;
-              padding: 20px;
+              /* background-color: #e0e7ef; */
+              background-color: #f5fcff;
+              background-image: url("https://www.transparenttextures.com/patterns/corrugation.png");
+            
+              padding: 24px;
               box-shadow: inset -1px 0 0 #ccc;
               }
           
@@ -59,11 +87,13 @@
                 display: block;
               margin: 10px 0;
               width: 100%;
-              padding: 10px;
+              padding: 16px;
               background: #5a78d1;
               border: none;
               color: white;
               font-weight: bold;
+              font-size: 20px;
+      
               border-radius: 4px;
               cursor: pointer;
               transition: background 0.2s;
@@ -78,21 +108,14 @@
                 padding: 20px;
                 display: flex;
                 flex-direction: column;
-                background-color: white;
+                /* background-color: white; */
+                
                 border-left: 1px solid #ccc;
                 overflow-y: auto;
                 justify-content: flex-start;
               }
           
-          
-              footer {
-                grid-area: footer;
-                background-color: #222;
-                color: #eee;
-                text-align: center;
-                padding: 10px;
-                font-size: 14px;
-              }
+         
           
               .page {
                 display: none;
