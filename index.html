@@ -2,7 +2,9 @@
 
 <!-- Fig. 14.26: cannon.html -->
 <!-- Cannon Game HTML5 document. -->
-<html>
+
+
+<!-- <html>
    <head>
       <meta charset = "utf-8">
       <title>Cannon Game</title>
@@ -22,7 +24,237 @@
       <p><input id = "startButton" type = "button" value = "Start Game">
       </p>
    </body>
+</html> -->
+
+
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Chicken Invaders</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+      height: 100%;
+    }
+
+    section {
+      display: none;
+      padding: 20px;
+    }
+
+    section.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    canvas {
+      background-color: #111;
+      border: 2px solid white;
+      display: block;
+      margin: 20px auto;
+      max-width: 100%;
+      width: 960px;
+      height: 720px;
+    }
+
+    input, button {
+      margin: 8px;
+      padding: 10px;
+      font-size: 1rem;
+    }
+
+    dialog {
+      background: #222;
+      color: white;
+      padding: 20px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .close-btn {
+      float: right;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin: 5px 0;
+    }
+
+    .center {
+      text-align: center;
+    }
+  </style>
+  <script src="cannon.js"></script>
+</head>
+<body>
+
+  <!-- Audio -->
+  <audio id="blockerSound" preload="auto">
+    <source src="blocker_hit.ogg" type="audio/ogg">
+  </audio>
+  <audio id="targetSound" preload="auto">
+    <source src="target_hit.ogg" type="audio/ogg">
+  </audio>
+  <audio id="cannonSound" preload="auto">
+    <source src="cannon_fire.ogg" type="audio/ogg">
+  </audio>
+
+  <!-- Welcome Page -->
+  <section id="welcome" class="active">
+    <div class="center">
+      <h1>🐔 Chicken Invaders</h1>
+      <p>By John Doe (123456789), Jane Smith (987654321)</p>
+      <button onclick="showPage('login')">Login</button>
+      <button onclick="showPage('register')">Register</button>
+      <button onclick="showAbout()">About</button>
+    </div>
+  </section>
+
+  <!-- Register Page -->
+  <section id="register">
+    <div class="center">
+      <h2>Register</h2>
+      <div class="form-group"><input type="text" placeholder="Username"></div>
+      <div class="form-group"><input type="password" placeholder="Password"></div>
+      <div class="form-group"><input type="password" placeholder="Confirm Password"></div>
+      <div class="form-group"><input type="text" placeholder="First Name"></div>
+      <div class="form-group"><input type="text" placeholder="Last Name"></div>
+      <div class="form-group"><input type="email" placeholder="Email"></div>
+      <div class="form-group"><input type="date" placeholder="Date of Birth"></div>
+      <button onclick="validateRegister()">Submit</button>
+      <button onclick="showPage('welcome')">Back</button>
+    </div>
+  </section>
+
+  <!-- Login Page -->
+  <section id="login">
+    <div class="center">
+      <h2>Login</h2>
+      <div class="form-group"><input type="text" placeholder="Username"></div>
+      <div class="form-group"><input type="password" placeholder="Password"></div>
+      <button onclick="login()">Login</button>
+      <button onclick="showPage('welcome')">Back</button>
+    </div>
+  </section>
+
+  <!-- Configuration Page -->
+  <section id="config">
+    <div class="center">
+      <h2>Game Configuration</h2>
+      <!-- Your settings here -->
+      <button onclick="showPage('game')">Start Game</button>
+    </div>
+  </section>
+
+  <!-- Game Page -->
+  <section id="game">
+    <div class="center">
+      <canvas id="theCanvas" width="960" height="720"></canvas>
+      <p><input id="startButton" type="button" value="Start Game"></p>
+    </div>
+  </section>
+
+  <!-- About Dialog -->
+  <dialog id="aboutModal">
+    <span class="close-btn" onclick="closeAbout()">❌</span>
+    <h2>About</h2>
+    <p>Authors:</p>
+    <ul>
+      <li>John Doe - 123456789</li>
+      <li>Jane Smith - 987654321</li>
+    </ul>
+  </dialog>
+
+  <script>
+    function showPage(id) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function validateRegister() {
+      const inputs = document.querySelectorAll('#register input');
+      const password = inputs[1].value;
+      const confirmPassword = inputs[2].value;
+      const email = inputs[5].value;
+
+      if (password.length < 8) {
+        alert("Password must be at least 8 characters.");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      if (!email.includes("@")) {
+        alert("Invalid email.");
+        return;
+      }
+
+      alert("Registration successful!");
+      showPage('login');
+    }
+
+    function login() {
+      alert("Login successful!");
+      showPage('config');
+    }
+
+    function showAbout() {
+      const modal = document.getElementById('aboutModal');
+      if (typeof modal.showModal === "function") {
+         modal.showModal();
+      } else {
+         alert("Your browser does not support the <dialog> element.");
+      }
+}
+
+    function closeAbout() {
+      document.getElementById('aboutModal').close();
+    }
+    // Close dialog on clicking outside OR Escape key
+   const aboutModal = document.getElementById('aboutModal');
+
+   aboutModal.addEventListener('click', (e) => {
+  const rect = aboutModal.getBoundingClientRect();
+  const clickedOutside =
+    e.clientX < rect.left || e.clientX > rect.right ||
+    e.clientY < rect.top || e.clientY > rect.bottom;
+
+   if (clickedOutside) {
+    aboutModal.close();
+   }
+   });
+
+    window.addEventListener('keydown', (e) => {
+  if (e.key === "Escape" && aboutModal.open) {
+    aboutModal.close();
+   }
+   });
+  </script>
+</body>
 </html>
+
+
+
+
+
+
+
+
 
 <!--
 **************************************************************************
