@@ -183,12 +183,51 @@
       document.getElementById(id).classList.add('active');
     }
 
+    const defaultUser = { username: "p", password: "testuser" };
+
+// Load users from localStorage or create empty list
+  function getStoredUsers() {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    return users;
+  }
+
+  function saveUser(user) {
+    const users = getStoredUsers();
+    users.push(user);
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+
+  function userExists(username) {
+    const users = getStoredUsers();
+    return users.some(u => u.username === username);
+  }
+
     function validateRegister() {
       const inputs = document.querySelectorAll('#register input');
+      const username = inputs[0].value.trim();
       const password = inputs[1].value;
       const confirmPassword = inputs[2].value;
-      const email = inputs[5].value;
+      const firstName = inputs[3].value.trim();
+      const lastName = inputs[4].value.trim();
+      const email = inputs[5].value.trim();
+      const birthDate = inputs[6].value;
+// Check all fields are filled
+      if (!username || !password || !confirmPassword || !firstName || !lastName || !email || !birthDate) {
+        alert("All fields are required.");
+        return;
+      }
+      //Check that Name only contains alphabets
+      const nameRegex = /^[A-Za-z]+$/;
+      if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
+        alert("First and last names must only contain letters.");
+        return;
+      }
 
+      //Check if User already Exists
+      if (userExists(username)) {
+        alert("Username already exists.");
+        return;
+      }
       if (password.length < 8) {
         alert("Password must be at least 8 characters.");
         return;
@@ -204,14 +243,44 @@
         return;
       }
 
+      // Create New User
+      const newUser = { username, password, firstName, lastName, email, birthDate };
+      // Save User
+      saveUser(newUser);
+      alert("Registration successful!");
+      showPage('login');
+    
+
       alert("Registration successful!");
       showPage('login');
     }
 
-    function login() {
+    // function login() {
+    //   alert("Login successful!");
+    //   showPage('config');
+    // }
+  function login() {
+    const inputs = document.querySelectorAll('#login input');
+    const username = inputs[0].value.trim();
+    const password = inputs[1].value;
+
+    if (username === defaultUser.username && password === defaultUser.password) {
+      alert("Welcome default user!");
+      showPage('config');
+      return;
+    }
+
+    const users = getStoredUsers();
+    const found = users.find(u => u.username === username && u.password === password);
+
+    if (found) {
       alert("Login successful!");
       showPage('config');
+    } else {
+      alert("Invalid username or password.");
     }
+  }
+
 
     function showAbout() {
       const modal = document.getElementById('aboutModal');
