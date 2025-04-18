@@ -31,23 +31,125 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Chicken Invaders</title>
+  <title>212112106_209507763</title>
   <style>
-    html, body {
+ 
+
+        /* Layout structure */
+        /* body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: grid;
+      grid-template-rows: 60px 1fr 40px;
+      grid-template-columns: 200px 1fr;
+      grid-template-areas:
+        "header header"
+        "menu content"
+        "footer footer";
+      height: 100vh;
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
       background-color: #000;
       color: #fff;
-      height: 100%;
+    } */
+    body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: grid;
+  grid-template-rows: 60px 1fr 40px;
+  grid-template-columns: 200px 1fr;
+  grid-template-areas:
+    "header header"
+    "menu content"
+    "footer footer";
+  height: 100vh;
+  background-color: #f4f7f8;
+  color: #333;
+}
+
+  /* Header */
+  header {
+    grid-area: header;
+    background-color: #2e3a59;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    font-size: 22px;
+    font-weight: bold;
+  }
+    /* Header */
+
+  /* Footer */
+  footer {
+    grid-area: footer;
+    background-color: #2e3a59;
+    color: #eee;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+  }
+  /* Footer */
+
+    nav {
+    grid-area: menu;
+    background-color: #e0e7ef;
+    padding: 20px;
+    box-shadow: inset -1px 0 0 #ccc;
     }
 
+    nav button {
+      display: block;
+    margin: 10px 0;
+    width: 100%;
+    padding: 10px;
+    background: #5a78d1;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    }
+
+    nav button:hover {
+      background: #4a67ba;
+    }
+
+    main {
+      grid-area: content;
+      padding: 20px;
+      background-color: white;
+      border-left: 1px solid #ccc;
+      overflow-y: auto;
+    }
+
+    footer {
+      grid-area: footer;
+      background-color: #222;
+      color: #eee;
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page_active {
+      display: block;
+    }
+
+    
     section {
       display: none;
       padding: 20px;
     }
 
-    section.active {
+    section.page_active {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -72,11 +174,12 @@
     }
 
     dialog {
-      background: #222;
-      color: white;
-      padding: 20px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 400px;
+      background: #fff;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
 
     dialog::backdrop {
@@ -86,7 +189,12 @@
     .close-btn {
       float: right;
       cursor: pointer;
+      font-size: 18px;
+      color: #999;
     }
+    .close-btn:hover {
+    color: #333;
+  }
 
     .form-group {
       margin: 5px 0;
@@ -100,6 +208,24 @@
 </head>
 <body>
 
+
+    <header>
+      Spaceship Fighters
+    </header>
+  
+    <!-- Menu / Sidebar -->
+    <nav>
+      <button onclick="showPage('welcome')">Welcome</button>
+      <button onclick="showPage('register')">Register</button>
+      <button onclick="showPage('login')">Login</button>
+      <button onclick="showPage('config')">Configuration</button>
+      <button onclick="showPage('game')">Game</button>
+      <button onclick="showAbout()">About</button>
+    </nav>
+
+
+  <!-- Content Area -->
+  <main>
   <!-- Audio -->
   <audio id="blockerSound" preload="auto">
     <source src="blocker_hit.ogg" type="audio/ogg">
@@ -112,10 +238,11 @@
   </audio>
 
   <!-- Welcome Page -->
-  <section id="welcome" class="active">
+  <section id="welcome" class="page active">
     <div class="center">
-      <h1>🐔 Chicken Invaders</h1>
-      <p>By John Doe (123456789), Jane Smith (987654321)</p>
+      <h1>Spaceship Fighters</h1>
+      <p>Game logo here</p>
+      <p>By Abed Showgan - 212112106, Michael Goldfrab - 209507763</p>
       <button onclick="showPage('login')">Login</button>
       <button onclick="showPage('register')">Register</button>
       <button onclick="showAbout()">About</button>
@@ -165,6 +292,8 @@
       <p><input id="startButton" type="button" value="Start Game"></p>
     </div>
   </section>
+</main>
+ <!-- Content Section ends here -->
 
   <!-- About Dialog -->
   <dialog id="aboutModal">
@@ -172,16 +301,27 @@
     <h2>About</h2>
     <p>Authors:</p>
     <ul>
-      <li>John Doe - 123456789</li>
-      <li>Jane Smith - 987654321</li>
+      <li>Abed Showgan - 212112106</li>
+      <li>Michael Goldfrab - 209507763</li>
+
     </ul>
   </dialog>
 
+  <!-- Footer -->
+  <footer>
+    SpaceShip Fighters Video Game - Assignment 2 - Internet Development Environments. Contact us: <a href="mailto:author@example.com" style="color: #fff;">author@example.com</a>
+  </footer>
+  <!-- Footer -->
+
   <script>
     function showPage(id) {
-      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('page_active'));
+      document.getElementById(id).classList.add('page_active');
     }
+  //   function showPage(pageId) {
+  //   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  //   document.getElementById(pageId).classList.add('active');
+  // }
 
     const defaultUser = { username: "p", password: "testuser" };
 
@@ -313,6 +453,11 @@
     aboutModal.close();
    }
    });
+
+     //auto-load the Welcome page on site launch
+  window.onload = () => {
+    showPage('welcome');
+  };
   </script>
 </body>
 </html>
