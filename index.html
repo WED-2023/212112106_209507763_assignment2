@@ -32,222 +32,16 @@
 <head>
   <meta charset="utf-8">
   <title>212112106_209507763</title>
-  <style>
- 
 
-        /* Layout structure */
-        /* body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      display: grid;
-      grid-template-rows: 60px 1fr 40px;
-      grid-template-columns: 200px 1fr;
-      grid-template-areas:
-        "header header"
-        "menu content"
-        "footer footer";
-      height: 100vh;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #000;
-      color: #fff;
-    } */
-    body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  display: grid;
-  grid-template-rows: 60px 1fr 40px;
-  grid-template-columns: 200px 1fr;
-  grid-template-areas:
-    "header header"
-    "menu content"
-    "footer footer";
-  height: 100vh;
-  background-color: #f4f7f8;
-  color: #333;
-}
+  <!-- Buttons stylesheet -->
+  <link rel="stylesheet" href="css/buttons.css">
+  
+  <!-- Game stylesheet -->
+  <link rel="stylesheet" href="css/game.css">
+  
+  <!-- Layout(Website Pages, Header, Footer and Menu) stylesheet (if needed) -->
+  <link rel="stylesheet" href="css/layout.css">
 
-  /* Header */
-  header {
-    grid-area: header;
-  background-color: #2e3a59;
-  color: white;
-  display: flex;
-  align-items: center;
-  padding: 0 30px;
-  font-size: 22px;
-  font-weight: bold;
-  gap: 15px; /* spacing between logo and title */
-  }
-  .header-logo {
-  height: 64px;
-  width: 64px;
-}
-    /* Header */
-    .welcome-logo {
-  width: 400px;
-  height: 400px;
-  margin: 20px 0;
-}
-
-  /* Footer */
-  footer {
-    grid-area: footer;
-    background-color: #2e3a59;
-    color: #eee;
-    text-align: center;
-    padding: 10px;
-    font-size: 14px;
-  }
-  /* Footer */
-
-    nav {
-    grid-area: menu;
-    background-color: #e0e7ef;
-    padding: 20px;
-    box-shadow: inset -1px 0 0 #ccc;
-    }
-
-    nav button {
-      display: block;
-    margin: 10px 0;
-    width: 100%;
-    padding: 10px;
-    background: #5a78d1;
-    border: none;
-    color: white;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.2s;
-    }
-
-    nav button:hover {
-      background: #4a67ba;
-    }
-
-    main {
-      grid-area: content;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      background-color: white;
-      border-left: 1px solid #ccc;
-      overflow-y: auto;
-      justify-content: flex-start;
-    }
-
-
-    footer {
-      grid-area: footer;
-      background-color: #222;
-      color: #eee;
-      text-align: center;
-      padding: 10px;
-      font-size: 14px;
-    }
-
-    .page {
-      display: none;
-      margin-top: 0;
-    }
-
-    .page_active {
-      display: block;
-    }
-
-    
-    section {
-      display: none;
-      padding: 20px;
-    }
-
-    section.page_active {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    canvas {
-      background-color: #111;
-      border: 2px solid white;
-      display: block;
-      margin: 20px auto;
-      max-width: 100%;
-      width: 960px;
-      height: 720px;
-    }
-
-    input, button {
-      margin: 8px;
-      padding: 10px;
-      font-size: 1rem;
-    }
-
-    dialog {
-      border: none;
-      border-radius: 8px;
-      padding: 20px;
-      max-width: 400px;
-      background: #fff;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    dialog::backdrop {
-      background: rgba(0, 0, 0, 0.6);
-    }
-
-    .close-btn {
-      float: right;
-      cursor: pointer;
-      font-size: 18px;
-      color: #999;
-    }
-    .close-btn:hover {
-    color: #333;
-  }
-
-    .form-group {
-      margin: 5px 0;
-    }
-
-    .center {
-      text-align: center;
-      
-    }
-
-    /* Config Page  */
-
-      .config-option {
-      margin: 15px 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      max-width: 400px;
-      margin-inline: auto;
-    }
-
-    .config-option label {
-      font-weight: bold;
-      flex: 1;
-    }
-
-    .config-option input[type="text"],
-    .config-option input[type="number"],
-    .config-option select {
-      flex: 1;
-      padding: 5px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-
-    /* Config Page  */
-  </style>
   <script src="cannon.js"></script>
 </head>
 <body>
@@ -287,9 +81,9 @@
       <img src="images/icons8-spaceship-64.png" alt="Game Logo" class="welcome-logo">
       <h1>Space Fighters</h1>
       <p>By Abed Showgan - 212112106, Michael Goldfrab - 209507763</p>
-      <button onclick="showPage('login')">Login</button>
-      <button onclick="showPage('register')">Register</button>
-      <button onclick="showAbout()">About</button>
+      <button class="button-29" role="button" onclick="showPage('login')">Login</button>
+      <button class="button-29" role="button" onclick="showPage('register')">Register</button>
+      <!-- <button onclick="showAbout()">About</button> -->
     </div>
   </section>
 
@@ -315,8 +109,8 @@
       <h2>Login</h2>
       <div class="form-group"><input type="text" placeholder="Username"></div>
       <div class="form-group"><input type="password" placeholder="Password"></div>
-      <button onclick="login()">Login</button>
-      <button onclick="showPage('welcome')">Back</button>
+      <button class="button-68" role="button" onclick="login()">Login</button>
+      <button class="button-5" role="button"  onclick="showPage('welcome')">Back</button>
     </div>
   </section>
 
@@ -395,194 +189,11 @@
   </footer>
   <!-- Footer -->
 
-  <script>
-    function showPage(id) {
-      document.querySelectorAll('section').forEach(sec => sec.classList.remove('page_active'));
-      document.getElementById(id).classList.add('page_active');
-    }
-  //   function showPage(pageId) {
-  //   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  //   document.getElementById(pageId).classList.add('active');
-  // }
+  <!-- Javascript Files -->
+  <script src="javascript/layout.js"></script>
+  <script src="javascript/game.js"></script>
+  <!-- Javascript Files -->
 
-    const defaultUser = { username: "p", password: "testuser" };
-
-// Load users from localStorage or create empty list
-  function getStoredUsers() {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    return users;
-  }
-
-  function saveUser(user) {
-    const users = getStoredUsers();
-    users.push(user);
-    localStorage.setItem("users", JSON.stringify(users));
-  }
-
-  function userExists(username) {
-    const users = getStoredUsers();
-    return users.some(u => u.username === username);
-  }
-
-    function validateRegister() {
-      const inputs = document.querySelectorAll('#register input');
-      const username = inputs[0].value.trim();
-      const password = inputs[1].value;
-      const confirmPassword = inputs[2].value;
-      const firstName = inputs[3].value.trim();
-      const lastName = inputs[4].value.trim();
-      const email = inputs[5].value.trim();
-      const birthDate = inputs[6].value;
-// Check all fields are filled
-      if (!username || !password || !confirmPassword || !firstName || !lastName || !email || !birthDate) {
-        alert("All fields are required.");
-        return;
-      }
-      //Check that Name only contains alphabets
-      const nameRegex = /^[A-Za-z]+$/;
-      if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
-        alert("First and last names must only contain letters.");
-        return;
-      }
-
-      //Check if User already Exists
-      if (userExists(username)) {
-        alert("Username already exists.");
-        return;
-      }
-      if (password.length < 8) {
-        alert("Password must be at least 8 characters.");
-        return;
-      }
-
-      if (password !== confirmPassword) {
-        alert("Passwords do not match.");
-        return;
-      }
-
-      if (!email.includes("@")) {
-        alert("Invalid email.");
-        return;
-      }
-
-      // Create New User
-      const newUser = { username, password, firstName, lastName, email, birthDate };
-      // Save User
-      saveUser(newUser);
-      alert("Registration successful!");
-      showPage('login');
-    
-
-      alert("Registration successful!");
-      showPage('login');
-    }
-
-    // function login() {
-    //   alert("Login successful!");
-    //   showPage('config');
-    // }
-  function login() {
-    const inputs = document.querySelectorAll('#login input');
-    const username = inputs[0].value.trim();
-    const password = inputs[1].value;
-
-    if (username === defaultUser.username && password === defaultUser.password) {
-      alert("Welcome default user!");
-      showPage('config');
-      return;
-    }
-
-    const users = getStoredUsers();
-    const found = users.find(u => u.username === username && u.password === password);
-
-    if (found) {
-      alert("Login successful!");
-      showPage('config');
-    } else {
-      alert("Invalid username or password.");
-    }
-  }
-
-
-    function showAbout() {
-      const modal = document.getElementById('aboutModal');
-      if (typeof modal.showModal === "function") {
-         modal.showModal();
-      } else {
-         alert("Your browser does not support the <dialog> element.");
-      }
-}
-
-    function closeAbout() {
-      document.getElementById('aboutModal').close();
-    }
-    // Close dialog on clicking outside OR Escape key
-   const aboutModal = document.getElementById('aboutModal');
-
-   aboutModal.addEventListener('click', (e) => {
-  const rect = aboutModal.getBoundingClientRect();
-  const clickedOutside =
-    e.clientX < rect.left || e.clientX > rect.right ||
-    e.clientY < rect.top || e.clientY > rect.bottom;
-
-   if (clickedOutside) {
-    aboutModal.close();
-   }
-   });
-
-    window.addEventListener('keydown', (e) => {
-  if (e.key === "Escape" && aboutModal.open) {
-    aboutModal.close();
-   }
-   });
-
-     //auto-load the Welcome page on site launch
-  window.onload = () => {
-    showPage('welcome');
-  };
-
-
-
-  // Start Game Play
-  function captureKey(input) {
-  input.value = ''; // clear current value
-  input.placeholder = 'Press any key...';
-  const handler = (e) => {
-    input.value = e.key;
-    input.placeholder = '';
-    document.removeEventListener('keydown', handler);
-  };
-  document.addEventListener('keydown', handler);
-}
-
-function startGame() {
-  const fireKey = document.getElementById('fireKey').value;
-  const duration = parseInt(document.getElementById('gameDuration').value);
-  const goodColor = document.getElementById('goodColor').value;
-  const badColor = document.getElementById('badColor').value;
-
-  if (!fireKey) {
-    alert("Please set a fire button.");
-    return;
-  }
-
-  if (duration < 2) {
-    alert("Game duration must be at least 2 minutes.");
-    return;
-  }
-
-  // You can store these settings in global variables or localStorage
-  localStorage.setItem("fireKey", fireKey);
-  localStorage.setItem("gameDuration", duration);
-  localStorage.setItem("goodColor", goodColor);
-  localStorage.setItem("badColor", badColor);
-
-  // Proceed to Game
-  showPage('game');
-}
-  // Start Game Play
-
-  </script>
 </body>
 </html>
 
