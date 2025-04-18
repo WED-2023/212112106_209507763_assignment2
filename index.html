@@ -72,15 +72,25 @@
   /* Header */
   header {
     grid-area: header;
-    background-color: #2e3a59;
-    color: white;
-    display: flex;
-    align-items: center;
-    padding: 0 30px;
-    font-size: 22px;
-    font-weight: bold;
+  background-color: #2e3a59;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  font-size: 22px;
+  font-weight: bold;
+  gap: 15px; /* spacing between logo and title */
   }
+  .header-logo {
+  height: 64px;
+  width: 64px;
+}
     /* Header */
+    .welcome-logo {
+  width: 400px;
+  height: 400px;
+  margin: 20px 0;
+}
 
   /* Footer */
   footer {
@@ -121,10 +131,14 @@
     main {
       grid-area: content;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
       background-color: white;
       border-left: 1px solid #ccc;
       overflow-y: auto;
+      justify-content: flex-start;
     }
+
 
     footer {
       grid-area: footer;
@@ -137,6 +151,7 @@
 
     .page {
       display: none;
+      margin-top: 0;
     }
 
     .page_active {
@@ -202,24 +217,53 @@
 
     .center {
       text-align: center;
+      
     }
+
+    /* Config Page  */
+
+      .config-option {
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      max-width: 400px;
+      margin-inline: auto;
+    }
+
+    .config-option label {
+      font-weight: bold;
+      flex: 1;
+    }
+
+    .config-option input[type="text"],
+    .config-option input[type="number"],
+    .config-option select {
+      flex: 1;
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    /* Config Page  */
   </style>
   <script src="cannon.js"></script>
 </head>
 <body>
 
 
-    <header>
-      Spaceship Fighters
-    </header>
-  
+  <header>
+    <img src="images/icons8-spaceship-64.png" alt="Spaceship Logo" class="header-logo">
+    <span>Space Fighters</span>
+  </header>
     <!-- Menu / Sidebar -->
     <nav>
       <button onclick="showPage('welcome')">Welcome</button>
       <button onclick="showPage('register')">Register</button>
       <button onclick="showPage('login')">Login</button>
       <button onclick="showPage('config')">Configuration</button>
-      <button onclick="showPage('game')">Game</button>
+      <!-- <button onclick="showPage('game')">Game</button> -->
       <button onclick="showAbout()">About</button>
     </nav>
 
@@ -240,8 +284,8 @@
   <!-- Welcome Page -->
   <section id="welcome" class="page active">
     <div class="center">
-      <h1>Spaceship Fighters</h1>
-      <p>Game logo here</p>
+      <img src="images/icons8-spaceship-64.png" alt="Game Logo" class="welcome-logo">
+      <h1>Space Fighters</h1>
       <p>By Abed Showgan - 212112106, Michael Goldfrab - 209507763</p>
       <button onclick="showPage('login')">Login</button>
       <button onclick="showPage('register')">Register</button>
@@ -281,7 +325,45 @@
     <div class="center">
       <h2>Game Configuration</h2>
       <!-- Your settings here -->
-      <button onclick="showPage('game')">Start Game</button>
+    <!-- Fire Button Selection -->
+    <div class="config-option">
+      <label for="fireKey">Spaceship Fire Button:</label>
+      <input type="text" id="fireKey" maxlength="1" readonly placeholder="Click to set key" onclick="captureKey(this)">
+    </div>
+
+    <!-- Minimum Game Duration -->
+    <div class="config-option">
+      <label for="gameDuration">Minimum Game Duration (minutes):</label>
+      <input type="number" id="gameDuration" min="2" value="2">
+    </div>
+
+    <!-- Good Spaceship Color -->
+    <div class="config-option">
+      <label for="goodColor">Good Spaceship Color:</label>
+      <select id="goodColor">
+        <option value="red">Red</option>
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+        <option value="yellow">Yellow</option>
+        <option value="white">White</option>
+      </select>
+    </div>
+
+    <!-- Bad Spaceship Color -->
+    <div class="config-option">
+      <label for="badColor">Bad Spaceship Color:</label>
+      <select id="badColor">
+        <option value="black">Black</option>
+        <option value="purple">Purple</option>
+        <option value="orange">Orange</option>
+        <option value="gray">Gray</option>
+        <option value="brown">Brown</option>
+      </select>
+    </div>
+
+      <!-- <button onclick="showPage('game')">Start Game</button> -->
+
+      <button onclick="startGame()">Start Game</button>
     </div>
   </section>
 
@@ -309,7 +391,7 @@
 
   <!-- Footer -->
   <footer>
-    SpaceShip Fighters Video Game - Assignment 2 - Internet Development Environments. Contact us: <a href="mailto:author@example.com" style="color: #fff;">author@example.com</a>
+    Space Fighters Video Game - Assignment 2 - Internet Development Environments. Contact us at: <a href="mailto:showganabed@gmail.com" style="color: #fff;">showganabed@gmail.com</a> 
   </footer>
   <!-- Footer -->
 
@@ -458,6 +540,48 @@
   window.onload = () => {
     showPage('welcome');
   };
+
+
+
+  // Start Game Play
+  function captureKey(input) {
+  input.value = ''; // clear current value
+  input.placeholder = 'Press any key...';
+  const handler = (e) => {
+    input.value = e.key;
+    input.placeholder = '';
+    document.removeEventListener('keydown', handler);
+  };
+  document.addEventListener('keydown', handler);
+}
+
+function startGame() {
+  const fireKey = document.getElementById('fireKey').value;
+  const duration = parseInt(document.getElementById('gameDuration').value);
+  const goodColor = document.getElementById('goodColor').value;
+  const badColor = document.getElementById('badColor').value;
+
+  if (!fireKey) {
+    alert("Please set a fire button.");
+    return;
+  }
+
+  if (duration < 2) {
+    alert("Game duration must be at least 2 minutes.");
+    return;
+  }
+
+  // You can store these settings in global variables or localStorage
+  localStorage.setItem("fireKey", fireKey);
+  localStorage.setItem("gameDuration", duration);
+  localStorage.setItem("goodColor", goodColor);
+  localStorage.setItem("badColor", badColor);
+
+  // Proceed to Game
+  showPage('game');
+}
+  // Start Game Play
+
   </script>
 </body>
 </html>

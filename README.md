@@ -22,3 +22,8 @@ It is a game where the player has the role fo a "Good Spaceship" and the mission
 - Register
 - About
 - Configuration
+
+
+### Resources Used: 
+- Images: 
+ - Logo: <a target="_blank" href="https://icons8.com/icon/nk8Hk3SpKo7g/spaceship">Spaceship</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
