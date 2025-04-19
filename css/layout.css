@@ -10,7 +10,9 @@
               "menu content"
               "footer footer";
             height: 100vh;
-            /* background-color: #f4f7f8; */
+            overflow: hidden; /* Hide scrollbars */
+
+          /* background-color: #f4f7f8; */
             background-color: #99c6d4;
             background-image: url("https://www.transparenttextures.com/patterns/cream-dust.png");
             /* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */

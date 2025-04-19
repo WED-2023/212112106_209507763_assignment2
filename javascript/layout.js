@@ -1,6 +1,10 @@
 function showPage(id) {
     document.querySelectorAll('section').forEach(sec => sec.classList.remove('page_active'));
     document.getElementById(id).classList.add('page_active');
+  // Pause game if it's running
+  if (typeof pauseGame === "function" && id !== "game") {
+    pauseGame();
+  }
   }
 
   const defaultUser = { username: "p", password: "testuser" };
@@ -92,6 +96,14 @@ function login() {
 
   if (username === defaultUser.username && password === defaultUser.password) {
     alert("Welcome default user!");
+
+    // Check and reset game history if logging with a different user
+    if (window.currentUser && window.currentUser !== username) {
+      window.gameHistory = [];
+      updateGameHistory();
+    }
+    window.currentUser = username;
+
     showPage('config');
     return;
   }
@@ -101,6 +113,14 @@ function login() {
 
   if (found) {
     alert("Login successful!");
+
+    // Check and reset game history if logging with a different user
+    if (window.currentUser && window.currentUser !== username) {
+      window.gameHistory = [];
+      updateGameHistory();
+    }
+    window.currentUser = username;
+
     showPage('config');
   } else {
     alert("Invalid username or password.");
@@ -110,6 +130,9 @@ function login() {
 
   function showAbout() {
     const modal = document.getElementById('aboutModal');
+    if (typeof pauseGame === "function") {
+      pauseGame();
+    }
     if (typeof modal.showModal === "function") {
        modal.showModal();
     } else {
@@ -123,16 +146,39 @@ function login() {
   // Close dialog on clicking outside OR Escape key
  const aboutModal = document.getElementById('aboutModal');
 
-aboutModal.addEventListener('click', (e) => {
-const rect = aboutModal.getBoundingClientRect();
-const clickedOutside =
-  e.clientX < rect.left || e.clientX > rect.right ||
-  e.clientY < rect.top || e.clientY > rect.bottom;
+document.addEventListener("DOMContentLoaded", () => {
+  const aboutModal = document.getElementById('aboutModal');
 
- if (clickedOutside) {
-  aboutModal.close();
- }
- });
+  if (aboutModal) {
+    aboutModal.addEventListener('click', (e) => {
+      const rect = aboutModal.getBoundingClientRect();
+      const clickedOutside =
+          e.clientX < rect.left || e.clientX > rect.right ||
+          e.clientY < rect.top || e.clientY > rect.bottom;
+
+      if (clickedOutside) {
+        aboutModal.close();
+      }
+
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === "Escape" && aboutModal.open) {
+        aboutModal.close();
+      }
+    });
+    aboutModal.addEventListener('close', () => {
+      if (typeof resumeGame === "function") {
+        resumeGame();
+      }
+    });
+
+
+  } else {
+    console.error("Element with id 'aboutModal' not found in the DOM.");
+  }
+});
+
 
   window.addEventListener('keydown', (e) => {
 if (e.key === "Escape" && aboutModal.open) {
@@ -141,8 +187,11 @@ if (e.key === "Escape" && aboutModal.open) {
  });
 
 
-
-
+window.addEventListener("keydown", function(e) {
+  if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
+    e.preventDefault();
+  }
+}, false);
 
 // Start Game Play
 function captureKey(input) {
@@ -156,29 +205,3 @@ const handler = (e) => {
 document.addEventListener('keydown', handler);
 }
 
-// function startGame() {
-// const fireKey = document.getElementById('fireKey').value;
-// const duration = parseInt(document.getElementById('gameDuration').value);
-// const goodColor = document.getElementById('goodColor').value;
-// const badColor = document.getElementById('badColor').value;
-
-// if (!fireKey) {
-//   alert("Please set a fire button.");
-//   return;
-// }
-
-// if (duration < 2) {
-//   alert("Game duration must be at least 2 minutes.");
-//   return;
-// }
-
-// // You can store these settings in global variables or localStorage
-// localStorage.setItem("fireKey", fireKey);
-// localStorage.setItem("gameDuration", duration);
-// localStorage.setItem("goodColor", goodColor);
-// localStorage.setItem("badColor", badColor);
-
-// // Proceed to Game
-// showPage('game');
-// }
-// Start Game Play

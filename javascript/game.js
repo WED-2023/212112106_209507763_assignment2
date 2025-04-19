@@ -1,16 +1,7 @@
-// Combined Game Logic File
-
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-
-const shipImg = new Image();
-shipImg.src = "images/spaceship.jpg";
-
-const fireSound = document.getElementById("cannonSound");
-const hitSound = document.getElementById("targetSound");
-const deathSound = document.getElementById("blockerSound");
-
-let ship = { x: 0, y: 0, width: 40, height: 60, speed: 5, color: "blue" };
+let canvas, ctx;
+let shipImg;
+let fireSound, hitSound, deathSound;
+let ship = new Player(1000, 700); //change the possition
 let bullets = [];
 let enemyBullets = [];
 let enemies = [];
@@ -25,65 +16,69 @@ let speedupCount = 0;
 let lastEnemyShotTime = 0;
 let gameTimer;
 let gameDuration = 120;
+window.gameHistory = [];
+let animationId = null; // Track requestAnimationFrame ID
+
 
 const enemyRows = 4;
 const enemyCols = 5;
 const spacing = 80;
 let enemyDirection = 1;
-   //auto-load the Welcome page on site launch
 
-window.onload = () => {
-    showPage('welcome');
-  document.getElementById("startButton").addEventListener("click", newGame);
-};
+let winnerImg = new Image();
+winnerImg.src = "images/winner.png";
 
-// document.addEventListener("keydown", e => keys[e.key] = true);
-// document.addEventListener("keyup", e => delete keys[e.key]);
+let loserImg = new Image();
+loserImg.src = "images/youlost.png";
+
+let champImg = new Image();
+champImg.src = "images/champion.png";
+
+let doBetterImg = new Image();
+doBetterImg.src = "images/dobetter.png";
 
 
-// document.addEventListener("keydown", e => {
-//     if (e.key === fireKey && !fireInterval && !gameOver) {
-//       shoot(); // instant fire
-//       fireInterval = setInterval(shoot, 300); // auto fire
-//     }
-//   });
-  
-//   document.addEventListener("keyup", e => {
-//     delete keys[e.key];
-//     if (e.key === fireKey) {
-//       clearInterval(fireInterval);
-//       fireInterval = null;
-//     }
-//   });
+//auto-load the Welcome page on site launch
 
-  document.addEventListener("keydown", e => {
-    keys[e.key] = true;
-  
-    if (e.key === fireKey && !gameOver) {
-      shoot();
-    }
-  });
-  
-  document.addEventListener("keyup", e => {
-    delete keys[e.key];
-  });
+document.addEventListener("DOMContentLoaded", () => {
+  canvas = document.getElementById("gameCanvas");
+  ctx = canvas.getContext("2d");
 
-function resizeCanvas() {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+  shipImg = new Image();
+  shipImg.src = "images/spaceship.jpg";
+
+  fireSound = document.getElementById("cannonSound");
+  hitSound = document.getElementById("targetSound");
+  deathSound = document.getElementById("blockerSound");
+
+  resizeCanvas();
+  showPage('welcome');
+  document.getElementById("timeLeft").innerText = 120; // if you start from 120 seconds
+
+  const startButton = document.getElementById("startButton");
+  if (startButton) {
+    startButton.addEventListener("click", startGame);
+  } else {
+    alert("Start button not found in the DOM.");
   }
-  window.addEventListener('resize', resizeCanvas);
-  window.addEventListener('load', () => {
-    resizeCanvas();
-    document.getElementById("startButton").addEventListener("click", newGame);
-  });
+});
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => delete keys[e.key]);
+window.addEventListener('resize', resizeCanvas);
 
-  
+
+
 
 function startTimer(duration) {
   let timeLeft = duration * 60;
   gameTimer = setInterval(() => {
     timeLeft--;
+    const timeLeftSpan = document.getElementById("timeLeft");
+    if (timeLeftSpan) {
+      timeLeftSpan.innerText = timeLeft;
+    }
+
+
     if (timeLeft <= 0 || passes >= 3 || enemies.length === 0) {
       endGame();
     }
@@ -105,62 +100,57 @@ function stopTimer() {
 }
 
 
-
 function startGame() {
-    const fireKey = document.getElementById('fireKey').value;
-    const duration = parseInt(document.getElementById('gameDuration').value);
-    const goodColor = document.getElementById('goodColor').value;
-    const badColor = document.getElementById('badColor').value;
-    
-    if (!fireKey) {
-      alert("Please set a fire button.");
-      return;
-    }
-    
-    if (duration < 2) {
-      alert("Game duration must be at least 2 minutes.");
-      return;
-    }
-    
-    // You can store these settings in global variables or localStorage
-    localStorage.setItem("fireKey", fireKey);
-    localStorage.setItem("gameDuration", duration);
-    localStorage.setItem("goodColor", goodColor);
-    localStorage.setItem("badColor", badColor);
-    
-    // Proceed to Game
-    showPage('game');
-    }
-// function newGame() {
-//   fireKey = localStorage.getItem("fireKey") || " ";
-//   gameDuration = parseInt(localStorage.getItem("gameDuration")) || 2;
-//   ship.color = localStorage.getItem("goodColor") || "blue";
-//   enemyColor = localStorage.getItem("badColor") || "red";
+  const fireKey = document.getElementById('fireKey').value;
+  const duration = parseInt(document.getElementById('gameDuration').value);
+  const goodColor = document.getElementById('goodColor').value;
+  const badColor = document.getElementById('badColor').value;
 
-//   document.addEventListener("keydown", e => {
-//     if (e.key === fireKey) shoot();
-//   });
+  if (!fireKey) {
+    alert("Please set a fire button.");
+    return;
+  }
 
-//   resetElements();
-//   startTimer(gameDuration);
-//   loop();
-// }
+  if (duration < 2) {
+    alert("Game duration must be at least 2 minutes.");
+    return;
+  }
+
+  // You can store these settings in global variables or localStorage
+  localStorage.setItem("fireKey", fireKey);
+  localStorage.setItem("gameDuration", duration);
+  localStorage.setItem("goodColor", goodColor);
+  localStorage.setItem("badColor", badColor);
+
+  // Proceed to Game
+  showPage('game');
+  newGame();
+}
 
 
 function newGame() {
-    fireKey = localStorage.getItem("fireKey") || " ";
-    gameDuration = parseInt(localStorage.getItem("gameDuration")) || 2;
-    ship.color = localStorage.getItem("goodColor") || "blue";
-    enemyColor = localStorage.getItem("badColor") || "red";
-  
-    resetElements();
-    startTimer(gameDuration);
-    loop();
-  }
+
+  stopTimer();
+  stopGameLoop();
+
+
+  fireKey = localStorage.getItem("fireKey") || " ";
+  gameDuration = parseInt(localStorage.getItem("gameDuration")) || 2;
+  ship.color = localStorage.getItem("goodColor") || "blue";
+  enemyColor = localStorage.getItem("badColor") || "red";
+
+  document.addEventListener("keydown", e => {
+    if (e.key === fireKey) shoot();
+  });
+
+  resetElements();
+  startTimer(gameDuration);
+  loop();
+}
 
 function resetElements() {
   ship.x = Math.random() * (canvas.width - ship.width);
-  ship.y = canvas.height * 0.65;
+  ship.y = canvas.height * 0.91;
   bullets = [];
   enemyBullets = [];
   enemies = [];
@@ -169,27 +159,28 @@ function resetElements() {
   gameOver = false;
   gameSpeed = 1;
   speedupCount = 0;
+  document.getElementById("timeLeft").textContent = timeLeft;
+
+  updateLivesDisplay();
+  document.getElementById("scoreDisplay").textContent = score;
 
   for (let r = 0; r < enemyRows; r++) {
     for (let c = 0; c < enemyCols; c++) {
-      enemies.push({ x: 100 + c * spacing, y: 50 + r * spacing, row: r });
+      enemies.push(new Enemy(100 + c * spacing, 50 + r * spacing, r));
     }
   }
 }
 
 function shoot() {
-  bullets.push({ x: ship.x + ship.width / 2, y: ship.y, speed: 7 });
+  bullets.push(new Bullet(ship.x + ship.width / 2, ship.y, 7));
   fireSound.play();
 }
 
 function update() {
-  if (keys["ArrowLeft"] && ship.x > 0) ship.x -= ship.speed;
-  if (keys["ArrowRight"] && ship.x < canvas.width - ship.width) ship.x += ship.speed;
-  if (keys["ArrowUp"] && ship.y > canvas.height * 0.6) ship.y -= ship.speed;
-  if (keys["ArrowDown"] && ship.y < canvas.height - ship.height) ship.y += ship.speed;
+  ship.move(keys, canvas);
 
-  bullets.forEach(b => b.y -= b.speed);
-  enemyBullets.forEach(b => b.y += b.speed);
+  bullets.forEach(b => b.move(-1));      // Player bullets go UP
+  enemyBullets.forEach(b => b.move(1));  // Enemy bullets go DOWN
 
   bullets = bullets.filter(b => b.y > 0);
   enemyBullets = enemyBullets.filter(b => b.y < canvas.height);
@@ -197,7 +188,7 @@ function update() {
   // Move enemies together
   let hitEdge = false;
   enemies.forEach(e => {
-    e.x += enemyDirection * gameSpeed;
+    e.move(enemyDirection, gameSpeed);
     if (e.x <= 0 || e.x >= canvas.width - 40) hitEdge = true;
   });
   if (hitEdge) {
@@ -211,8 +202,10 @@ function update() {
       if (b.x > e.x && b.x < e.x + 40 && b.y > e.y && b.y < e.y + 40) {
         bullets.splice(bi, 1);
         enemies.splice(ei, 1);
-        score += (e.row + 1) * 5;
+        score += (enemyRows - e.row) * 5;
         hitSound.play();
+        document.getElementById("scoreDisplay").textContent = score;
+
       }
     });
   });
@@ -222,7 +215,7 @@ function update() {
   if (enemyBullets.length === 0 || (enemyBullets[0].y > canvas.height * 0.75 && now - lastEnemyShotTime > 500)) {
     let shooter = enemies[Math.floor(Math.random() * enemies.length)];
     if (shooter) {
-      enemyBullets.push({ x: shooter.x + 20, y: shooter.y + 20, speed: 3 + gameSpeed });
+      enemyBullets.push(new Bullet(shooter.x + 20, shooter.y + 20, 3 + gameSpeed));
       lastEnemyShotTime = now;
     }
   }
@@ -232,8 +225,9 @@ function update() {
     if (b.x > ship.x && b.x < ship.x + ship.width && b.y > ship.y && b.y < ship.y + ship.height) {
       passes++;
       deathSound.play();
+      updateLivesDisplay();
       ship.x = Math.random() * (canvas.width - ship.width);
-      ship.y = canvas.height * 0.65;
+      ship.y = canvas.height * 0.91;
       enemyBullets.splice(bi, 1);
     }
   });
@@ -248,53 +242,93 @@ function draw() {
 
   // Draw good ship
   ctx.fillStyle = ship.color;
-  ctx.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
+  ship.draw(ctx, shipImg);
 
   // Draw bullets
-  ctx.fillStyle = "magenta";
-  bullets.forEach(b => {
-    ctx.beginPath();
-    ctx.arc(b.x, b.y, 4, 0, 2 * Math.PI);
-    ctx.fill();
-  });
+  bullets.forEach(b => b.draw(ctx, "magenta"));
+
 
   // Draw enemy bullets
-  ctx.fillStyle = "black";
-  enemyBullets.forEach(b => {
-    ctx.beginPath();
-    ctx.arc(b.x, b.y, 4, 0, 2 * Math.PI);
-    ctx.fill();
-  });
-
+  enemyBullets.forEach(b => b.draw(ctx, "black"));
   // Draw enemies
-  ctx.fillStyle = enemyColor;
-  enemies.forEach(e => {
-    ctx.beginPath();
-    ctx.rect(e.x, e.y, 40, 40);
-    ctx.fill();
-  });
+  enemies.forEach(e => e.draw(ctx, enemyColor));
+
+
 
   ctx.fillStyle = "white";
-  ctx.font = "20px Arial";
-  ctx.fillText("Score: " + score, 10, 20);
-  ctx.fillText("Lives: " + (3 - passes), 10, 45);
+  ctx.font = "16px Arial";
+  ctx.textAlign = "left";
+
 
   if (gameOver) {
-    ctx.font = "40px Arial";
-    ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.textAlign = "center";
+
+    let imgToShow;
+
+    if (passes >= 3) {
+      // Player lost by 3 hits
+      imgToShow = loserImg;
+    } else if (score >= 249) {
+      // Player killed all enemies (perfect score)
+      imgToShow = champImg;
+    }
+      else if (score >= 100) {
+      // Player survived with decent score
+      imgToShow = winnerImg;
+    }
+    else {
+      // Player survived but weak score
+      imgToShow = doBetterImg;
+    }
+
+    const desiredWidth = 500;  // or whatever size fits nicely
+    const desiredHeight = 500; // adjust height proportionally
+
+    ctx.drawImage(
+        imgToShow,
+        canvas.width / 2 - desiredWidth / 2,
+        canvas.height / 2 - desiredHeight / 2,
+        desiredWidth,
+        desiredHeight
+    );
   }
 }
 
 function loop() {
+  update();
+  draw();
+
   if (!gameOver) {
-    update();
-    draw();
-    requestAnimationFrame(loop);
+    animationId = requestAnimationFrame(loop);
   }
 }
 
-function endGame() {
-  gameOver = true;
-  stopTimer();
-  setTimeout(() => alert("Game Over! Final Score: " + score), 500);
+function stopGameLoop() {
+  if (animationId) {
+    cancelAnimationFrame(animationId);
+    animationId = null;
+  }
 }
+
+
+
+
+function endGame() {
+  if (!gameOver) {
+    gameOver = true;
+    stopTimer();
+    stopGameLoop();
+
+    // Save the score
+    gameHistory.push({ gameNumber: gameHistory.length + 1, score });
+    updateGameHistory();
+  }
+
+}
+
+
+
+
+

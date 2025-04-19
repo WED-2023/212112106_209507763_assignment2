@@ -1,3 +1,12 @@
+#gameArea {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px; /* spacing between canvas and history */
+    margin-top: 20px;
+    justify-content: center; /* center it horizontally */
+}
+
+
 canvas {
     background: #fff;
     display: block;
@@ -8,3 +17,50 @@ canvas {
     width: 960px;
     height: 720px;
   }
+
+#statsContainer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    background-color: #222;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+}
+
+#livesContainer img {
+    width: 30px;
+    height: 30px;
+    margin: 0 2px;
+}
+
+#historyContainer {
+    background-color: #222;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    color: white;
+    font-family: Arial, sans-serif;
+    width: 250px;
+}
+
+#historyContainer h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#historyList {
+    list-style: decimal;
+    padding-left: 20px;
+}
+
+#historyList li {
+    margin-bottom: 8px;
+}
+
+/* Highlight last score */
+#historyList li.lastScore {
+    color: gold;
+    font-weight: bold;
+}
