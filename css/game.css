@@ -1,5 +1,10 @@
 canvas {
     background: #fff;
     display: block;
-    margin: 0 auto;
+    border: 2px solid black;
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    width: 960px;
+    height: 720px;
   }
