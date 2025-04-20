@@ -27,3 +27,6 @@ It is a game where the player has the role fo a "Good Spaceship" and the mission
 ### Resources Used: 
 - Images: 
  - Logo: <a target="_blank" href="https://icons8.com/icon/nk8Hk3SpKo7g/spaceship">Spaceship</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+
+Audio:
+- Background Music: Music by <a href="https://pixabay.com/users/bluelike_u-24430674/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=271158">bliu music</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=271158">Pixabay</a>

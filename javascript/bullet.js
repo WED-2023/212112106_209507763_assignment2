@@ -12,7 +12,7 @@ class Bullet {
     draw(ctx, color = "magenta") {
         ctx.fillStyle = color;
         ctx.beginPath();
-        ctx.arc(this.x, this.y, 4, 0, 2 * Math.PI);
+        ctx.arc(this.x, this.y, 6, 0, 2 * Math.PI);
         ctx.fill();
     }
 }

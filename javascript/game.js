@@ -1,7 +1,8 @@
 let canvas, ctx;
 let shipImg;
 let fireSound, hitSound, deathSound;
-let ship = new Player(1000, 700); //change the possition
+// let ship = new Player(1000, 700); //change the position
+let ship = new Player(800, 300); 
 let bullets = [];
 let enemyBullets = [];
 let enemies = [];
@@ -45,8 +46,10 @@ document.addEventListener("DOMContentLoaded", () => {
   ctx = canvas.getContext("2d");
 
   shipImg = new Image();
-  shipImg.src = "images/spaceship.jpg";
+  shipImg.src = "images/ally_jet_1.png";
 
+
+  bgMusic = document.getElementById("bgMusic")
   fireSound = document.getElementById("cannonSound");
   hitSound = document.getElementById("targetSound");
   deathSound = document.getElementById("blockerSound");
@@ -54,14 +57,27 @@ document.addEventListener("DOMContentLoaded", () => {
   resizeCanvas();
   showPage('welcome');
   document.getElementById("timeLeft").innerText = 120; // if you start from 120 seconds
-
+  const endButton = document.getElementById("endButton");
   const startButton = document.getElementById("startButton");
+  const newGameButton = document.getElementById("newGameButton");
   if (startButton) {
     startButton.addEventListener("click", startGame);
   } else {
     alert("Start button not found in the DOM.");
   }
+
+  if (endButton) {
+    endButton.addEventListener("click", endGame);
+  } else {
+    alert("End button not found in the DOM.");
+  }
+
+
+  if (newGameButton) {
+    newGameButton.addEventListener("click", startNewGame);
+  }
 });
+
 document.addEventListener("keydown", e => keys[e.key] = true);
 document.addEventListener("keyup", e => delete keys[e.key]);
 window.addEventListener('resize', resizeCanvas);
@@ -143,6 +159,10 @@ function newGame() {
     if (e.key === fireKey) shoot();
   });
 
+  // Start background game music
+  bgMusic.currentTime = 0;
+  bgMusic.play();
+  // Start background game music
   resetElements();
   startTimer(gameDuration);
   loop();
@@ -150,7 +170,8 @@ function newGame() {
 
 function resetElements() {
   ship.x = Math.random() * (canvas.width - ship.width);
-  ship.y = canvas.height * 0.91;
+ // ship.y = canvas.height * 0.91;
+  ship.y = canvas.height * 0.84;
   bullets = [];
   enemyBullets = [];
   enemies = [];
@@ -227,7 +248,7 @@ function update() {
       deathSound.play();
       updateLivesDisplay();
       ship.x = Math.random() * (canvas.width - ship.width);
-      ship.y = canvas.height * 0.91;
+      ship.y = canvas.height * 0.84;
       enemyBullets.splice(bi, 1);
     }
   });
@@ -318,17 +339,42 @@ function stopGameLoop() {
 function endGame() {
   if (!gameOver) {
     gameOver = true;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     stopTimer();
     stopGameLoop();
-
+       // Safely stop background music
+    if (!bgMusic.paused) {
+    bgMusic.pause();
+      bgMusic.currentTime = 0;
+    }
     // Save the score
     gameHistory.push({ gameNumber: gameHistory.length + 1, score });
     updateGameHistory();
   }
 
+  
+
 }
 
+//New game Function, Previous Game is not saved in history
+function startNewGame() {
+  stopTimer();
+  stopGameLoop();
 
+  // Stop music just in case
+  if (!bgMusic.paused) {
+    bgMusic.pause();
+    bgMusic.currentTime = 0;
+  }
+
+  gameOver = false;
+
+  // Skip pushing to gameHistory
+
+  // Restart a new game
+  showPage('game');
+  newGame();
+}
 
 
 

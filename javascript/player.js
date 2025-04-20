@@ -1,5 +1,5 @@
 class Player {
-    constructor(x, y, width = 40, height = 60, speed = 5, color = "blue") {
+    constructor(x, y, width = 100, height = 100, speed = 5, color = "blue") {
         this.x = x;
         this.y = y;
         this.width = width;
