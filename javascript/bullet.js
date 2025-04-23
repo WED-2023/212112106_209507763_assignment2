@@ -15,4 +15,11 @@ class Bullet {
         ctx.arc(this.x, this.y, 6, 0, 2 * Math.PI);
         ctx.fill();
     }
+
+    // draw(ctx, color) {
+    //     ctx.fillStyle = color;
+    //     ctx.beginPath();
+    //     ctx.arc(this.x, this.y, 6, 0, 2 * Math.PI);
+    //     ctx.fill();
+    // }
 }

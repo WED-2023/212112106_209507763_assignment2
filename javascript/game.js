@@ -60,11 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const endButton = document.getElementById("endButton");
   const startButton = document.getElementById("startButton");
   const newGameButton = document.getElementById("newGameButton");
-  if (startButton) {
-    startButton.addEventListener("click", startGame);
-  } else {
-    alert("Start button not found in the DOM.");
-  }
+ 
 
   if (endButton) {
     endButton.addEventListener("click", endGame);
