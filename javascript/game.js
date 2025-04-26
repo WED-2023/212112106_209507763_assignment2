@@ -1,5 +1,6 @@
 let canvas, ctx;
 let shipImg;
+let enemyImg = new Image();
 let fireSound, hitSound, deathSound;
 // let ship = new Player(1000, 700); //change the position
 let ship = new Player(800, 300); 
@@ -46,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ctx = canvas.getContext("2d");
 
   shipImg = new Image();
+  enemyImg = new Image();
   shipImg.src = "images/ally_jet_1.png";
 
 
@@ -115,7 +117,6 @@ function stopTimer() {
 function startGame() {
   const fireKey = document.getElementById('fireKey').value;
   const duration = parseInt(document.getElementById('gameDuration').value);
-  const goodColor = document.getElementById('goodColor').value;
   const badColor = document.getElementById('badColor').value;
 
   if (!fireKey) {
@@ -128,10 +129,8 @@ function startGame() {
     return;
   }
 
-  // You can store these settings in global variables or localStorage
   localStorage.setItem("fireKey", fireKey);
   localStorage.setItem("gameDuration", duration);
-  localStorage.setItem("goodColor", goodColor);
   localStorage.setItem("badColor", badColor);
 
   // Proceed to Game
@@ -148,8 +147,16 @@ function newGame() {
 
   fireKey = localStorage.getItem("fireKey") || " ";
   gameDuration = parseInt(localStorage.getItem("gameDuration")) || 2;
-  ship.color = localStorage.getItem("goodColor") || "blue";
   enemyColor = localStorage.getItem("badColor") || "red";
+
+  enemyImg = new Image();
+  if (enemyColor === "black") {
+    enemyImg.src = "images/blackEnemy.png";
+  } else if (enemyColor === "yellow") {
+    enemyImg.src = "images/yellowEnemy.png";
+  } else {
+    enemyImg.src = "images/redEnemy.png";
+  }
 
   document.addEventListener("keydown", e => {
     if (e.key === fireKey) shoot();
@@ -268,7 +275,7 @@ function draw() {
   // Draw enemy bullets
   enemyBullets.forEach(b => b.draw(ctx, "black"));
   // Draw enemies
-  enemies.forEach(e => e.draw(ctx, enemyColor));
+  enemies.forEach(e => e.draw(ctx));
 
 
 
