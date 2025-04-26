@@ -3,8 +3,8 @@ class Enemy {
         this.x = x;
         this.y = y;
         this.row = row;
-        this.width = 40;
-        this.height = 40;
+        this.width = 60; //was 40*40 before
+        this.height = 60;
         this.type = type;
     }
 
